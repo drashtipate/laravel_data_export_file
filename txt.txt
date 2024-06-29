@@ -1,0 +1,79 @@
+//Install maatwebsite/excel package:
+composer require maatwebsite/excel
+
+// remove krva mate
+composer remove maatwebsite/excel
+
+//Register Plugin’s Service in Providers & Aliases
+ config/app.php file. laravel v8 me add karna padta hai 
+
+'providers' => [
+  Maatwebsite\Excel\ExcelServiceProvider::class,
+ ],  
+
+'aliases' => [ 
+  'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+], 
+
+//Create an Export Class
+php artisan make:export StudentExport --model=Student
+
+//Create an Export Class
+php artisan make:import StudentImport --model=Student
+
+//php.ini file me
+extension=php_gd.dll // add karna
+extension=gd //uncomment karna
+
+//Install the PHPSpreadsheet library:
+composer require phpoffice/phpspreadsheet //ye command run me error aaye to
+composer.json file me:
+ "maennchen/zipstream-php": "^2.1",
+        "phpoffice/phpspreadsheet": "^1.29.0",  // add krke composer update command chalana
+composer update --with-dependencies // ye run karne k bad composer require maatwebsite/excel ye command run karke 3.1 install hoga
+
+email ko mask karne k liye:
+php artisan make:observer EmailMaskObserver --model=Student
+
+
+//export data to pdf file:
+composer require barryvdh/laravel-dompdf   //Install the package..
+
+'providers' => [
+    // ...
+    Barryvdh\DomPDF\ServiceProvider::class,
+],   // add the class to the providers array in config/app.php
+
+'aliases' => [
+    // ...
+    'PDF' => Barryvdh\DomPDF\Facade::class,
+],  //add lines to the aliases array in config/app.php
+
+config/excel.php
+<?php
+
+return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | Export File Settings
+    |--------------------------------------------------------------------------
+    |
+    | Here you can specify the settings for the exported files.
+    |
+    */
+
+    'exports' => [
+        'csv' => [
+            'delimiter' => ',',
+            'enclosure' => '"',
+        ],
+        'xlsx' => [
+            'format' => 'xlsx',
+        ],
+        'xls' => [
+            'format' => 'xls',
+        ],
+    ],
+
+];
